@@ -1,4 +1,7 @@
 
+# .env.example “Copy .env.example → .env.development before running.”
+REACT_APP_API_BASE_URL=http://localhost:5111
+
 # Technical Task:
 
 You are finishing implementing a Commission Calculator.

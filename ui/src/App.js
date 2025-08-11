@@ -108,7 +108,8 @@ export default function App() {
 
       <div style={{ marginTop: 24 }}>
         <h3>Results</h3>
-        {error && <p style={{ color: 'salmon' }}>{error}</p>}
+        {error && <p role="alert" style={{ color: 'salmon' }}>{error}</p>}
+
         {result && (
           <>
             <p>Total FCamara commission: {fmt.format(result.fCamaraCommissionAmount)}</p>
