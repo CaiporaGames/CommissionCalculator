@@ -1,33 +1,29 @@
+using FCamara.CommissionCalculator.Models;
+using FCamara.CommissionCalculator.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FCamara.CommissionCalculator.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CommisionController : ControllerBase
+    [Route("commission")]
+    public class CommissionController : ControllerBase
     {
-        [ProducesResponseType(typeof(CommissionCalculationResponse), 200)]
-        [HttpPost]
-        public IActionResult Calculate(CommissionCalculationRequest calculationRequest)
+        private readonly ICommissionCalculator _calculator;
+
+        public CommissionController(ICommissionCalculator calculator)
         {
-            return Ok(new CommissionCalculationResponse() { 
-                FCamaraCommissionAmount = 999,
-                CompetitorCommissionAmount = 100
-            });
+            _calculator = calculator;
         }
-    }
 
-    public class CommissionCalculationRequest
-    {
-        public int LocalSalesCount { get; set; }
-        public int ForeignSalesCount { get; set; }
-        public decimal AverageSaleAmount { get; set; }
-    }
+        [ProducesResponseType(typeof(CommissionCalculationResponse), 200)]
+        [ProducesResponseType(400)]
+        [HttpPost]
+        public IActionResult Calculate([FromBody] CommissionCalculationRequest request)
+        {
+            if (!ModelState.IsValid) return ValidationProblem(ModelState);
 
-    public class CommissionCalculationResponse
-    {
-        public decimal FCamaraCommissionAmount { get; set; }
-
-        public decimal CompetitorCommissionAmount { get; set; }
+            var result = _calculator.Calculate(request);
+            return Ok(result);
+        }
     }
 }
